@@ -31,27 +31,43 @@ The application leverages Google's ML Kit for both on-device text recognition fr
 
 ### 1. Initial Setup & Model Downloads
 
-When you first open the app or access the camera/translation feature, it will check if the required language models for translation (e.g., English, Spanish) are downloaded.
+<img align="right" src="./assets/screengrabs/screen1.jpg" alt="Home screen with camera button top right.">When you first open the app or access the camera/translation feature, it will check if the required language models for translation (e.g., English, Spanish) are downloaded.
 
 *   If models are not present, you might be prompted, or you can tap the **Download Icon** in the AppBar to initiate model downloads. An internet connection is required for this initial download.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### 2. Using the Camera for OCR & Translation
 
 1.  **Open Camera View:** Tap the **Camera Icon** (`add_a_photo_outlined` or `camera_alt`) in the AppBar.
-
-    *(Placeholder for: Screenshot of Main Screen with Camera Icon highlighted)*
-    `![Main Screen with Camera Icon](./assets/screengrabs/screen1.jpg)`
 
 2.  **Point at Text:** Aim your device's camera at the text you want to recognize and translate.
     *   The app will attempt to recognize text from the camera stream.
     *   Recognized text will automatically appear in the "Original Text" field.
 
 3.  **Automatic Translation:**
-    *   Once text appears in the "Original Text" field (and is at least 3 characters long), it will be automatically translated into the target language (e.g., Spanish).
+    <img align="right" src="./assets/screengrabs/screen2.jpg" alt="Capture Translation Button">>*   Once text appears in the "Original Text" field (and is at least 3 characters long), it will be automatically translated into the target language (e.g., Spanish).
     *   The translation will appear in the "Translated Text" field. You may see a "Translating..." indicator.
-
-    *(Placeholder for: Screenshot of Camera View with live OCR, original text, and translated text fields populated)*
-    `![Live OCR and Translation View](./assets/screengrabs/screen2.jpg)`
 
 ### 3. Manual Text Entry & Translation
 
@@ -72,9 +88,6 @@ Once you are satisfied with the original and translated text:
 
 ### 5. Viewing Saved Translations
 
-When the camera view is not active, the main screen will display a list of all your captured translations.
+<img align="right" src="./assets/screengrabs/screen3.jpg" alt="Capture Translation Button">When the camera view is not active, the main screen will display a list of all your captured translations.
 
 *   Each item will show the original text, the translated text, and the language code.
-
-    *(Placeholder for: Screenshot of Capture Translation button)*
-    `![Capture Translation Button](./assets/screengrabs/screen3.jpg)`
