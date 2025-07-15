@@ -60,10 +60,20 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _initializeCameraAndDependencies(); // Combined initialization
     _loadTranslations();
-    _originalTextController.addListener(_onOriginalTextChangedForTranslation); // Renamed for clarity
+    _originalTextController.addListener(_onOriginalTextChangedForTranslation);
   }
 
+  Future<void> _closeCamera() async {
+    print("Closing camera...");
+    await _cameraController?.stopImageStream();
+    await _cameraController?.dispose();
+    setState(() {
+      _isCameraInitialized = false;
+    });
+}
+
   Future<void> _initializeCameraAndDependencies() async {
+    print("Initializing camera...");
     // Initialize Camera
     try {
       _cameras = await availableCameras();
@@ -81,6 +91,7 @@ class _HomePageState extends State<HomePage> {
 
         // Start image stream for text recognition if camera is shown
         if (_showCamera) {
+          print("Starting image stream for text recognition...");
           _cameraController!.startImageStream(_processCameraImage);
         }
 
@@ -117,6 +128,7 @@ class _HomePageState extends State<HomePage> {
         sourceLanguage: _sourceLanguage,
         targetLanguage: _targetLanguage,
       );
+      print("OnDeviceTranslator initialized after model download.");
     } else {
       print("Translation models not ready.");
       // SnackBar shown in _checkAndDownloadModels if needed
@@ -159,6 +171,7 @@ class _HomePageState extends State<HomePage> {
 
   // This function is now specifically for triggering TRANSLATION
   void _onOriginalTextChangedForTranslation() {
+    print("onOriginalTextChangedForTranslation called");
     if (_debounceTranslation?.isActive ?? false) _debounceTranslation!.cancel();
     _debounceTranslation = Timer(const Duration(milliseconds: 700), () async {
       final textToTranslate = _originalTextController.text;
@@ -207,18 +220,16 @@ class _HomePageState extends State<HomePage> {
     });
 
     if (_showCamera && _isCameraInitialized && _cameraController != null) {
+      print("showCamera isCameraInitialized and controller");
       if (!_cameraController!.value.isStreamingImages) {
         await _cameraController!.startImageStream(_processCameraImage);
         print("Image stream started.");
       }
       // Ensure translation models are checked when camera opens
-      _checkAndDownloadModels().then((_) {
-        if (_originalTextController.text.length >= 3) {
-          _onOriginalTextChangedForTranslation();
-        }
-      });
-    } else if (!_showCamera && _cameraController != null && _cameraController!.value.isStreamingImages) {
-      await _cameraController!.stopImageStream();
+      await _checkAndDownloadModels();
+    } else if (!_showCamera) {
+      print("not showCamera");
+      await _closeCamera();
       print("Image stream stopped.");
       _isTextRecognizerBusy = false; // Reset busy flag
       // Clear text fields when closing camera
@@ -227,6 +238,7 @@ class _HomePageState extends State<HomePage> {
       if (_debounceTranslation?.isActive ?? false) _debounceTranslation!.cancel();
       if(mounted) setState(() {_isTranslating = false;});
     } else if (_showCamera && !_isCameraInitialized) {
+      print("showCamera but not isCameraInitialized");
       // If toggling to show camera but it's not initialized yet, initialize it.
       _initializeCameraAndDependencies();
     }
@@ -234,6 +246,7 @@ class _HomePageState extends State<HomePage> {
 
 
   Future<void> _processCameraImage(CameraImage image) async {
+    print("textRecognizer: $_textRecognizer isTextRecognizerBusy: $_isTextRecognizerBusy showCamera: $_showCamera isCameraInitialized: $_isCameraInitialized");
     if (_textRecognizer == null || _isTextRecognizerBusy || !_showCamera || !_isCameraInitialized) {
       return;
     }
